@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\subject;
+use App\Models\course;
 
 class teacher extends Authenticatable
 {
@@ -24,6 +25,11 @@ class teacher extends Authenticatable
 
    public function subject(){
     return $this->belongsTo(subject::class);
+   }
+
+   //courses relationship
+   public function course(){
+    return $this->hasMany(course::class);
    }
 
   protected $hidden = [

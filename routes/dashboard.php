@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ManagerAuthController;
 use App\Http\Controllers\managerController;
+use App\Http\Controllers\managerCourseController;
 use App\Http\Controllers\subjectController;
 use App\Http\Controllers\TeacherAuthController;
 use App\Http\Controllers\teacherController;
+use App\Http\Controllers\teacherCourseController;
 use App\Http\Controllers\teacherProfileController;
 use App\Http\Controllers\yearController;
 
@@ -27,6 +29,7 @@ Route::middleware(ManagerAuth::class)->group(
         Route::resource("subject" , subjectController::class);
         Route::resource("teacher" , teacherController::class);
         Route::resource("manager" , managerController::class);
+        Route::resource('manager_courses' , managerCourseController::class);
 
         Route::get('sort.subject/{key}' ,[subjectController::class , 'sort'] )->name('sort.subject');
         Route::get('sort.teacher/{key}' , [teacherController::class , 'sort'] )->name('sort.teacher');
@@ -63,6 +66,9 @@ Route::middleware(TeacherAuth::class)->group(
 
          //profile details
         Route::resource('teacherProfile' , teacherProfileController::class);
+
+        //courses
+        Route::resource('teacher_courses' , teacherCourseController::class);
 
         Route::get('UpdateTeacherProfilePhoto' , function(){
          return view('dashboard.pages.profile details.teachers.updateTeacherProfilePhoto') ;
