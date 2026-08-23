@@ -16,7 +16,9 @@ class teacherCourseController extends Controller
      */
     public function index()
     {
-        return view('dashboard.pages.courses.teacherCourses.view');
+         $teacher_id = Auth::guard('teach')->user()->id ;
+         $course = course::where('teacher_id' ,  $teacher_id )->get();
+        return view('dashboard.pages.courses.teacherCourses.view' , compact('course'));
     }
 
     /**
@@ -40,7 +42,7 @@ class teacherCourseController extends Controller
         if($request->hasFile('image')){
         $image = $request->file('image');
         $image_name = uniqid() . '.' . $image->extension();
-        $image->storeAs('public/images/courses' ,$image_name ) ;
+        $image->storeAs('images/courses' ,$image_name  , 'public') ;
         }
 
         course::create([

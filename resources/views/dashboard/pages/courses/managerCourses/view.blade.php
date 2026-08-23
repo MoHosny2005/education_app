@@ -1,16 +1,13 @@
 @extends('dashboard.layout.main')
 @section('body')
 
-<div>
-    <a href="{{route('teacher_courses.create')}}" class="btn btn-primary" >Add New Course</a>
-</div>
 
 
- <div class="tables-wrapper">
+<div class="tables-wrapper">
           <div class="row">
             <div class="col-lg-12">
               <div class="card-style mb-30">
-                <h6 class="mb-10">My Courses</h6>
+                <h6 class="mb-10"> Courses</h6>
                 <div class="d-flex flex-wrap justify-content-between align-items-center py-3">
                   <div class="left">
                     <p>Show <span>10</span> entries</p>
@@ -47,7 +44,7 @@
                       <!-- end table row-->
                     </thead>
                     <tbody>
-                    @foreach ( $course as $course )
+                    @foreach ( $courses as $course )
 
                     <tr>
                       <td class="p-3">

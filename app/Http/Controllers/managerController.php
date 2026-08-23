@@ -8,107 +8,96 @@ use App\Models\manager;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class managerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $managers = manager::all();
-        return view('dashboard.pages.managers.view' , compact('managers') );
+        return view('dashboard.pages.managers.view', compact('managers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('dashboard.pages.managers.add');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(managerRequestAdd $request)
     {
+        $imgName = null;
 
-      $tmp = $_FILES['img']['tmp_name'];
-        $img_name = $_FILES['img']['name'];
-        $extension = $request->img->extension();
-        $img_name = uniqid(). "." . $extension ;
-        move_uploaded_file($tmp , storage_path("app/public/images/managers/$img_name"));
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imgName = uniqid() . '.' . $image->extension();
+            $image->storeAs('images/managers', $imgName, 'public');
+        }
 
-         manager::create([
-            'name' => $request->name ,
-            'email' => $request->email ,
-            'password' => $request->password ,
-            'age' => $request->age ,
-            'gender' => $request->gender ,
-            'city' => $request->city ,
-            'img' => $img_name ,
+        manager::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password, // الـ hash هيتعمل تلقائي من الـ cast لو مطبقها زي الـ teacher
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'city' => $request->city,
+            'img' => $imgName,
         ]);
 
-
-        return to_route('manager.index')->with('success' , $request->name . " Has Been Added Successfully"  );
-
+        return to_route('manager.index')->with('success', $request->name . ' Has Been Added Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $manager = manager::findorfail($id);
-        return view('dashboard.pages.managers.edit' , compact('manager') );
+        $manager = manager::findOrFail($id);
+        return view('dashboard.pages.managers.edit', compact('manager'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(managerRequestEdit $request, string $id)
     {
-        $manager = manager::findorfail($id);
-        $manager_img = $manager['img'];
-        if($request->hasFile('img')){
-            //delete old image
-            unlink(storage_path("app/public/images/managers/$manager_img"));
+        $manager = manager::findOrFail($id);
+        $imgName = $manager->img; // الافتراضي: يفضل زي ما هو لو مفيش صورة جديدة
 
-            //store new image
-        $tmp = $_FILES['img']['tmp_name'];
-        $manager_img = $_FILES['img']['name'];
-        $extension = $request->img->extension();
-        $manager_img = uniqid(). "." . $extension ;
-        move_uploaded_file($tmp , storage_path("app/public/images/managers/$manager_img"));
+        if ($request->hasFile('img')) {
+            // امسح الصورة القديمة لو موجودة فعلاً بس
+            if ($manager->img && Storage::disk('public')->exists('images/managers/' . $manager->img)) {
+                Storage::disk('public')->delete('images/managers/' . $manager->img);
+            }
+
+            // خزّن الصورة الجديدة
+            $image = $request->file('img');
+            $imgName = uniqid() . '.' . $image->extension();
+            $image->storeAs('images/managers', $imgName, 'public');
         }
-         manager::where('id' , $id)->update([
-            'name' => $request->name ,
-            'email' => $request->email ,
-            'age' => $request->age ,
-            'gender' => $request->gender ,
-            'city' => $request->city ,
-            'img' => $manager_img ,
+
+        $manager->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'city' => $request->city,
+            'img' => $imgName,
         ]);
 
-        return to_route('manager.index')->with('success' , $request->name . " Has Been Updated Successfully " );
+        return to_route('manager.index')->with('success', $request->name . ' Has Been Updated Successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-         $manager_name = manager::where('id' , $id)->value('name');
-         manager::where('id' , $id)->delete();
-         return to_route('manager.index')->with('success' , $manager_name . " Has Been Deleted Successfully " );
+        $manager = manager::findOrFail($id);
+
+        // امسح الصورة المرتبطة بيه لو موجودة فعلاً
+        if ($manager->img && Storage::disk('public')->exists('images/managers/' . $manager->img)) {
+            Storage::disk('public')->delete('images/managers/' . $manager->img);
+        }
+
+        $manager_name = $manager->name;
+        $manager->delete();
+
+        return to_route('manager.index')->with('success', $manager_name . ' Has Been Deleted Successfully');
     }
 }

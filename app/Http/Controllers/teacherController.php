@@ -7,104 +7,81 @@ use App\Http\Requests\teacherRequestEdit;
 use App\Models\subject;
 use App\Models\teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class teacherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $count = teacher::count();
         $teachers = teacher::with('subject')->get();
         $subjects = subject::all();
-        return view('dashboard.pages.teachers.view' , compact(['teachers' , 'subjects' , 'count']) );
+        return view('dashboard.pages.teachers.view', compact(['teachers', 'subjects', 'count']));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $subjects = subject::all();
-        return view('dashboard.pages.teachers.add' , compact('subjects'));
+        return view('dashboard.pages.teachers.add', compact('subjects'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(teacherRequestAdd $request)
     {
+        $img_name = null;
 
-        $tmp = $_FILES['img']['tmp_name'];
-        $img_name = $_FILES['img']['name'];
-        $extension = $request->img->extension();
-        $img_name = uniqid(). "." . $extension ;
-        move_uploaded_file($tmp , storage_path("app/public/images/teachers/$img_name"));
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $img_name = uniqid() . '.' . $image->extension();
+            $image->storeAs('images/teachers', $img_name, 'public');
+        }
 
         teacher::create([
-            'name' => $request->name ,
-            'email' => $request->email ,
-            'password' => $request->password ,
-            'phone' => $request->phone ,
-            'age' => $request->age ,
-            'gender' => $request->gender ,
-            'city' => $request->city ,
-            'subject_id' => $request->subject_id ,
-            'bio' => $request->bio ,
-            'img' => $img_name ,
-            'cover_img' => null ,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'phone' => $request->phone,
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'city' => $request->city,
+            'subject_id' => $request->subject_id,
+            'bio' => $request->bio,
+            'img' => $img_name,
+            'cover_img' => null,
         ]);
 
-        return to_route('teacher.index')->with('success' ,  " MR $request->name Has Been Added Successfully");
+        return to_route('teacher.index')->with('success', " MR $request->name Has Been Added Successfully");
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $subjects = subject::all();
-        $teacher = teacher::findorfail($id);
-        return view('dashboard.pages.teachers.edit', compact(['subjects' , 'teacher']));
+        $teacher = teacher::findOrFail($id);
+        return view('dashboard.pages.teachers.edit', compact(['subjects', 'teacher']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(teacherRequestEdit $request, string $id)
     {
-        if($request->hasFile('img')   ){
+        $teacher = teacher::findOrFail($id);
+        $img_name = $teacher->img; // الافتراضي: تفضل زي ما هي لو مفيش صورة جديدة
 
-             $tmp = $_FILES['img']['tmp_name'];
-        $img_name = $_FILES['img']['name'];
-        $extension = $request->img->extension();
-        $img_name = uniqid(). "." . $extension ;
-        move_uploaded_file($tmp , storage_path("app/public/images/teachers/$img_name"));
+        if ($request->hasFile('img')) {
+            // امسح الصورة القديمة لو موجودة فعلاً
+            if ($teacher->img && Storage::disk('public')->exists('images/teachers/' . $teacher->img)) {
+                Storage::disk('public')->delete('images/teachers/' . $teacher->img);
+            }
 
-        teacher::where('id' , $id)->update([
-            'name' => $request->name ,
-            'email' => $request->email ,
-            'phone' => $request->phone ,
-            'age' => $request->age ,
-            'gender' => $request->gender ,
-            'city' => $request->city ,
-            'subject_id' => $request->subject_id ,
-            'bio' => $request->bio ,
-            'img' => $img_name ,
-        ]);
+            // خزّن الصورة الجديدة
+            $image = $request->file('img');
+            $img_name = uniqid() . '.' . $image->extension();
+            $image->storeAs('images/teachers', $img_name, 'public');
+        }
 
-        }else{
-
-             teacher::where('id', $id)->update([
+        $teacher->update([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
@@ -113,40 +90,39 @@ class teacherController extends Controller
             'city' => $request->city,
             'subject_id' => $request->subject_id,
             'bio' => $request->bio,
+            'img' => $img_name,
         ]);
 
-        }
-
-        return to_route('teacher.index')->with('success' , ' MR ' . $request->name . ' Has Been Updated Successfully');
+        return to_route('teacher.index')->with('success', ' MR ' . $request->name . ' Has Been Updated Successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        $teacher_name = teacher::where('id' , $id)->value('name');
-        teacher::where('id' , $id)->delete();
-        return to_route('teacher.index')->with('success' , 'MR' . $teacher_name . ' Has Been Deleted Succesfully'  );
+        $teacher = teacher::findOrFail($id);
+
+        // امسح الصورة المرتبطة بيه لو موجودة فعلاً
+        if ($teacher->img && Storage::disk('public')->exists('images/teachers/' . $teacher->img)) {
+            Storage::disk('public')->delete('images/teachers/' . $teacher->img);
+        }
+
+        $teacher_name = $teacher->name;
+        $teacher->delete();
+
+        return to_route('teacher.index')->with('success', 'MR' . $teacher_name . ' Has Been Deleted Succesfully');
     }
 
-    /**
-     * Sort teachers
-     */
-    public function sort(string $key){
-
+    public function sort(string $key)
+    {
         $count = teacher::count();
 
-        if($key == 'name'){
+        if ($key == 'name') {
             $teachers = teacher::with('subject')->orderBy('name')->get();
-
-        }elseif($key == 'subject'){
+        } elseif ($key == 'subject') {
             $teachers = teacher::with('subject')->orderBy('subject_id')->get();
-        }else{
+        } else {
             return to_route('teacher.index');
         }
 
-        return view('dashboard.pages.teachers.view' , compact(['teachers' , 'count']));
-
+        return view('dashboard.pages.teachers.view', compact(['teachers', 'count']));
     }
 }
