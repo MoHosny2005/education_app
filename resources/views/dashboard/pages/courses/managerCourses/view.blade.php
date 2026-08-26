@@ -46,18 +46,22 @@
                     <tbody>
                     @foreach ( $courses as $course )
 
+
                     <tr>
                       <td class="p-3">
                         <div class="lead">
+                         <a href="{{route('manager_courses.show' , $course->id )}}">
                           <div class="lead-image">
                             <img src="{{asset('storage/images/courses/' . $course->image)}}" alt="" />
                           </div>
+                          </a>
+
 
                         </div>
                       </td>
 
                       <td class="p-3">
-                        <a href="" class=" text-black "> {{ $course->title }} </a>
+                        <a href=" {{route('manager_courses.show' , $course->id )}} " class="text-gray" > {{ $course->title }} </a>
                       </td>
 
                        <td class="p-3">

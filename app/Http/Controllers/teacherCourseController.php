@@ -66,7 +66,9 @@ class teacherCourseController extends Controller
      */
     public function show(string $id)
     {
-        //
+       $course = course::with(['subject' , 'teacher' , 'requirment'])->find($id);
+        $final_price = $course->price - ($course->price * $course->discount / 100);
+       return view('dashboard.pages.courses.teacherCourses.courseDetails' , compact(['course' ,  'final_price']) );
     }
 
     /**

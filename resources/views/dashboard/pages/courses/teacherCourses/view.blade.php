@@ -53,14 +53,16 @@
                       <td class="p-3">
                         <div class="lead">
                           <div class="lead-image">
+                            <a href=" {{route('teacher_courses.show' , $course->id )}} ">
                             <img src="{{asset('storage/images/courses/' . $course->image)}}" alt="" />
+                            </a>
                           </div>
 
                         </div>
                       </td>
 
                       <td class="p-3">
-                        <a href="" class=" text-black "> {{ $course->title }} </a>
+                        <a href=" {{route('teacher_courses.show' , $course->id )}}" class=" text-black "> {{ $course->title }} </a>
                       </td>
 
                        <td class="p-3">
