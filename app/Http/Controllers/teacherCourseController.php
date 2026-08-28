@@ -6,11 +6,14 @@ use App\Http\Requests\courseAddRequest;
 use App\Models\course;
 use App\Models\subject;
 use App\Models\teacher;
+use App\Policies\coursePolicy ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class teacherCourseController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -66,7 +69,11 @@ class teacherCourseController extends Controller
      */
     public function show(string $id)
     {
-       $course = course::with(['subject' , 'teacher' , 'requirment'])->find($id);
+        $course = course::with(['subject' , 'teacher' , 'requirment'])->find($id);
+        $teacher = Auth::guard('teach')->user();
+        if($teacher->cannot('view' , $course)){
+            return to_route('teacher_courses.index');
+        }
         $final_price = $course->price - ($course->price * $course->discount / 100);
        return view('dashboard.pages.courses.teacherCourses.courseDetails' , compact(['course' ,  'final_price']) );
     }
