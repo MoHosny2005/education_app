@@ -1,7 +1,16 @@
 @extends('dashboard.layout.main')
 @section('body')
 
+{{-- sucessfull message --}}
+<div>
+     @if(session('success'))
+<p class="alert alert-primary">
 
+    {{session('success')}}
+
+</p>
+@endif
+</div>
 
 <div class="tables-wrapper">
           <div class="row">

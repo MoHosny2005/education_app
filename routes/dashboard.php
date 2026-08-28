@@ -39,6 +39,9 @@ Route::middleware(ManagerAuth::class)->group(
 
         //profile details
 
+        // change course status
+        Route::patch('change_status/{id}/{status}' , [managerCourseController::class , 'changeStatus'])->name('change_status');
+
     }
 );
 

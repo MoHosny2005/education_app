@@ -115,6 +115,8 @@ h1,h2,h3,h4,h5,.font-display{
 }
 </style>
 
+
+
 <div class="container-xxl " style="max-width:960px;">
 
   <!-- ===================== 1. HERO IMAGE (wide) ===================== -->
@@ -200,20 +202,36 @@ h1,h2,h3,h4,h5,.font-display{
   </div>
 
   <div class="buttons d-flex gap-1 py-4">
-  @unless($course->status === 'Pending')
-    <a href="" class="btn btn-outline-active"> Pending </a>
+  @unless($course->status === 'Pending' )
+    <form action="{{route('change_status' , [ $course->id , 'Pending'])}}" method="post" >
+        @csrf
+        @method('patch')
+        <button class="btn btn-outline-dark">Pending</button>
+    </form>
 @endunless
 
 @unless($course->status === 'Approved')
-    <a href="" class="btn btn-outline-success"> Approve </a>
+    <form action="{{route('change_status' , [ $course->id , 'Approved'])}}" method="post">
+        @csrf
+        @method('patch')
+        <button class="btn btn-outline-success">Approve</button>
+    </form>
 @endunless
 
 @unless($course->status === 'Rejected')
-    <a href="" class="btn btn-outline-danger"> Reject </a>
+    <form action="{{route('change_status' , [ $course->id, 'Rejected'])}}" method="post"  >
+        @csrf
+        @method('patch')
+        <button class="btn btn-outline-danger">Reject</button>
+    </form>
 @endunless
 
 @unless($course->status === 'Suspended')
-       <a href="" class="btn btn-outline-primary"> Suspend </a>
+       <form action="{{route('change_status' , [ $course->id, 'Suspended'])}}" method="post" >
+        @csrf
+        @method('patch')
+        <button class="btn btn-outline-primary">Suspend</button>
+       </form>
 @endunless
   </div>
 

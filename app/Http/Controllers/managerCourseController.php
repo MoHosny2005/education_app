@@ -65,4 +65,9 @@ class managerCourseController extends Controller
     {
         //
     }
+
+    public function changeStatus(string $id , string $status){
+        course::where('id' , $id)->update(['status' => $status]);
+        return to_route('manager_courses.index')->with('success' , 'Course Is ' . $status . ' Now' );
+    }
 }
