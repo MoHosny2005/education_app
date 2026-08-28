@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 // use Illuminate\Foundation\Auth\Access\Authorizable ;//
+use Illuminate\Notifications\Notifiable ;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\subject;
 use App\Models\course;
@@ -11,6 +12,7 @@ use App\Models\course;
 class teacher extends Authenticatable
 {
   //  use Authorizable ;
+  use Notifiable ;
 
     protected $fillable = [
         'name' ,

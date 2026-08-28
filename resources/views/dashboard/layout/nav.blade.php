@@ -50,7 +50,32 @@
                   </svg>
                   <span></span>
                 </button>
+                @if(Auth::guard('teach')->check())
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
+                    @foreach(Auth::guard('teach')->user()->unreadNotifications as $notification)
+                  <li>
+                    <a href="#0">
+                      <div class="image">
+                        <img src="{{asset('dashboard')}}/images/lead/lead-6.png" alt="" />
+                      </div>
+                      <div class="content">
+                        <h6>
+                          Admin
+                          <span class="text-regular">
+                            {{ $notification->data['details'] }}
+                          </span>
+                        </h6>
+                        <p >
+                          {{ $notification->data['content'] }}
+                        </p>
+                        <span>{{ $notification->created_at->diffForHumans() }}</span>
+                      </div>
+                    </a>
+                  </li>
+                  @endforeach
+                </ul>
+                @elseif(Auth::guard('manage')->check())
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
                   <li>
                     <a href="#0">
                       <div class="image">
@@ -71,27 +96,8 @@
                       </div>
                     </a>
                   </li>
-                  <li>
-                    <a href="#0">
-                      <div class="image">
-                        <img src="{{asset('dashboard')}}/images/lead/lead-1.png" alt="" />
-                      </div>
-                      <div class="content">
-                        <h6>
-                          Jonathon
-                          <span class="text-regular">
-                            like on a product.
-                          </span>
-                        </h6>
-                        <p>
-                          Lorem ipsum dolor sit amet, consect etur adipiscing
-                          elit Vivamus tortor.
-                        </p>
-                        <span>10 mins ago</span>
-                      </div>
-                    </a>
-                  </li>
                 </ul>
+                @endif
               </div>
               <!-- notification end -->
               <!-- message start -->
