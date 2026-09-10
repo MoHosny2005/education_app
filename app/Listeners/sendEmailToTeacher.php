@@ -8,7 +8,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail ;
 use App\Mail\teacherMail ;
 
-class sendEmailToTeacher
+
+class sendEmailToTeacher implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -29,6 +30,6 @@ class sendEmailToTeacher
           $details = "Course Activation Status";
         $content = "Your Course " . $course->title . "  Created From: " . $date->diffForHumans() . " Has Been " . $event->status .  " If You Have Any Problems Connect With Admin" ;
         Mail::to($teacher->email)->send(new teacherMail($content , $details , $teacher));
-       
+
     }
 }

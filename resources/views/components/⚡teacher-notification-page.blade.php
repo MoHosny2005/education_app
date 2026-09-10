@@ -28,7 +28,9 @@ new class extends Component
 <div>
     <div class="card-style">
 
-    @forelse ( Auth::guard('teach')->user()->Notifications as $notification )
+    @forelse ( Auth::guard('teach')->user()->Notifications->sortBy([
+        ['read_at' , 'asc']
+    ]) as $notification )
 
          <div class="single-notification  ">
 
