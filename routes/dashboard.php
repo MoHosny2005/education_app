@@ -79,6 +79,10 @@ Route::middleware(TeacherAuth::class)->group(
         Route::get('UpdateTeachercoverPhoto' , function(){
          return view('dashboard.pages.profile details.teachers.updateTeacherCoverImg') ;
         })->name('UpdateTeachercoverPhoto');
+        // notifications page route
+        Route::get('teacherNotifications' , function(){
+            return view('dashboard.pages.notifications.teacherNotifications');
+        })->name('teacherNotifications');
 
 
           Route::put('updatingTeacherProfilePhoto/{id}' , [teacherProfileController::class , 'updateProfileImage'])->name('updatingTeacherProfilePhoto');

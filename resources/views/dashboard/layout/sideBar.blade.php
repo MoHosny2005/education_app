@@ -95,6 +95,7 @@
 
     @endif
 
+    {{-- courses item --}}
     <li class="nav-item ">
           <a href="
           @if(Auth::guard('teach')->check())
@@ -110,6 +111,24 @@
           </a>
 
         </li>
+
+        {{-- notifications item --}}
+         <li class="nav-item ">
+          <a href="
+          @if(Auth::guard('teach')->check())
+            {{route('teacherNotifications')}}
+          @elseif(Auth::guard('manage')->check())
+          {{-- ////// --}}
+           @endif
+            " class="collapsed d-flex justify-content-center align-items-center">
+            <span class="icon  ">
+               <i class="lni lni-agenda"></i>
+            </span>
+            <span class="text">Notifications</span>
+          </a>
+
+        </li>
+
         <li class="nav-item nav-item-has-children">
           <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" aria-controls="ddmenu_2"
             aria-expanded="false" aria-label="Toggle navigation">
