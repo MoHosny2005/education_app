@@ -63,7 +63,9 @@ Route::middleware(TeacherAuth::class)->group(
          return view('dashboard.pages.index') ;
         })->name('teacher.dash');
 
-
+        //  Route::get('mail' , function(){
+        //     return view('dashboard.pages.emails.teacherMail');
+        //  });
 
         Route::get('auth_teacher_logout'  , [managerAuthController::class , 'logout'] )->name('auth_teacher_logout');
 

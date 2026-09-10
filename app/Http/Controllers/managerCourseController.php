@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\changeCourseStatus;
 use App\Models\course;
+use App\Models\teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 
@@ -71,7 +72,8 @@ class managerCourseController extends Controller
     public function changeStatus(string $id , string $status){
         course::where('id' , $id)->update(['status' => $status]);
         $course = course::find($id);
-       Event(new changeCourseStatus($course , $status));
+        $teacher = teacher::find($course->teacher_id);
+       Event(new changeCourseStatus($course , $status , $teacher));
         return to_route('manager_courses.index')->with('success' , 'Course Is ' . $status . ' Now' );
     }
 }

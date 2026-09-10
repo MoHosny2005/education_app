@@ -17,11 +17,12 @@ class changeCourseStatus
     /**
      * Create a new event instance.
      */
-    public $course , $status;
-    public function __construct($course , $status)
+    public $course , $status , $teacher;
+    public function __construct($course , $status , $teacher )
     {
         $this->course = $course ;
         $this->status = $status ;
+        $this->teacher = $teacher ;
     }
 
     /**
