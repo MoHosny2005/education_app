@@ -12,6 +12,16 @@ new class extends Component
         $notification->markAsRead();
     }
   }
+
+
+  public function deleteNotification(string $id){
+    $notification = Auth::guard('teach')->user()->notifications()->find($id);
+
+    if($notification){
+        $notification->delete();
+    }
+  }
+
 };
 ?>
 
@@ -43,10 +53,12 @@ new class extends Component
               </a>
             </div>
             <div class="action">
-              <button class="delete-btn">
+                @if( ! is_null($notification->read_at))
+              <button class="delete-btn" wire:click="deleteNotification('{{$notification->id}}')">
                 <i class="lni lni-trash-can"></i>
               </button>
-              <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown" aria-expanded="false">
+              @endif
+              <button  class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="lni lni-more-alt"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
@@ -66,7 +78,7 @@ new class extends Component
             </div>
           </div>
     @empty
-          <p>You Do Not Having Any Notifications Yet</p>
+          <p class="text-gray">You Do Not Having Any Notifications Yet</p>
     @endforelse
 
 
