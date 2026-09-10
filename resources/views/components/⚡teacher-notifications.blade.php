@@ -2,8 +2,11 @@
 
 use Livewire\Component;
 
+
 new class extends Component
 {
+
+
 
 
 
@@ -29,10 +32,11 @@ new class extends Component
                   @endif
                 </button>
 
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
-                    @foreach( Auth::guard('teach')->user()->unreadNotifications->take(4) as $notification)
+                <ul class="dropdown-menu dropdown-menu-end " aria-labelledby="notification">
+                    @forelse( Auth::guard('teach')->user()->Notifications->take(4) as $notification)
+                
                   <li>
-                    <a href="#0">
+                    <a href="{{route('teacherNotifications')}}">
                       <div class="image">
                         <img src="{{asset('dashboard')}}/images/lead/lead-6.png" alt="" />
                       </div>
@@ -50,7 +54,10 @@ new class extends Component
                       </div>
                     </a>
                   </li>
-                  @endforeach
+                  </a>
+                  @empty
+                  <p class="text-xs text-gray ">You Do Not Having Any Notifications Yet</p>
+                  @endforelse
                 </ul>
                 @elseif(Auth::guard('manage')->check())
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
