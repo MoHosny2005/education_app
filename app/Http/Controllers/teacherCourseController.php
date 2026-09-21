@@ -95,6 +95,10 @@ class teacherCourseController extends Controller
      */
     public function update(courseUpdateRequest $request, string $id)
     {
+        // Delete any old update requests for this course
+         update_course::where('course_id', $id)->delete();
+
+         
          $course = course::findOrFail($id);
         $img_name = $course->image; // الافتراضي: تفضل زي ما هي لو مفيش صورة جديدة
 
