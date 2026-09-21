@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\courseAddRequest;
+use App\Http\Requests\courseUpdateRequest;
 use App\Models\course;
 use App\Models\subject;
 use App\Models\teacher;
+use App\Models\update_course;
 use App\Policies\coursePolicy ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 
 class teacherCourseController extends Controller
 {
@@ -83,15 +85,43 @@ class teacherCourseController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $course = course::find($id);
+          $subjects = subject::all();
+        return view('dashboard.pages.courses.teacherCourses.edit' , compact(['subjects' , 'course']));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(courseUpdateRequest $request, string $id)
     {
-        //
+         $course = course::findOrFail($id);
+        $img_name = $course->image; // الافتراضي: تفضل زي ما هي لو مفيش صورة جديدة
+
+        if ($request->hasFile('img')) {
+            // امسح الصورة القديمة لو موجودة فعلاً
+            if ($course->image && Storage::disk('public')->exists('images/courses/' . $course->image)) {
+                Storage::disk('public')->delete('images/courses/' . $course->image);
+            }
+
+            // خزّن الصورة الجديدة
+            $image = $request->file('image');
+            $img_name = uniqid() . '.' . $image->extension();
+            $image->storeAs('images/courses', $img_name, 'public');
+        }
+
+        update_course::create([
+            'title' => $request->title ,
+            'course_id' => $id,
+            'requirment_id' => $request->requirment_id ,
+          'description' => $request->description ,
+          'short_description' => $request->short_description ,
+          'price' => $request->price ,
+          'discount' => $request->discount ,
+          'image' =>  $img_name ,
+        ]);
+
+        return to_route('teacher_courses.index')->with('success' , 'Your Course Entered At The Pendening Status Waiting For Approved');
     }
 
     /**

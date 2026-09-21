@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\subject;
 use App\Models\teacher;
+use App\Models\update_course;
 
 class course extends Model
 {
@@ -35,5 +36,10 @@ class course extends Model
     //requirment_id relationship
     public function requirment(){
         return $this->belongsTo(subject::class , 'requirment_id' );
+    }
+
+    //updated course relationship
+    public function updated_courses(){
+        return $this->hasMany(update_course::class);
     }
 }

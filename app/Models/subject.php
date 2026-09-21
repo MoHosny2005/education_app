@@ -33,4 +33,8 @@ class subject extends Model
     public function requiredByCourse(){
         return $this->hasMany(course::class , 'requirment_id');
     }
+
+     public function requiredByUpdatedCourse(){
+        return $this->hasMany(update_course::class , 'requirment_id');
+    }
 }

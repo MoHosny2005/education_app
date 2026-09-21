@@ -199,7 +199,9 @@ h1,h2,h3,h4,h5,.font-display{
     </p>
   </div>
 
- 
+ <div class="div">
+    <a href="{{route('teacher_courses.edit' , $course->id)}}" class="btn btn-primary">Edit Course</a>
+ </div>
 
 </div>
 

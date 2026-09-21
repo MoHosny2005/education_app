@@ -1,6 +1,17 @@
 @extends('dashboard.layout.main')
 @section('body')
 
+{{-- sucessfull message --}}
+<div>
+     @if(session('success'))
+<p class="alert alert-primary">
+
+    {{session('success')}}
+
+</p>
+@endif
+</div>
+
 <div>
     <a href="{{route('teacher_courses.create')}}" class="btn btn-primary" >Add New Course</a>
 </div>
