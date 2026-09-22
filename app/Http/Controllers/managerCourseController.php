@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\changeCourseStatus;
 use App\Models\course;
 use App\Models\teacher;
+use App\Models\update_course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 
@@ -24,7 +25,8 @@ class managerCourseController extends Controller
      */
     public function create()
     {
-        //
+       $updated_courses = update_course::all();
+       return view('dashboard.pages.courses.managerCourses.viewUpdatedCourses' , compact('updated_courses'));
     }
 
     /**
@@ -43,6 +45,12 @@ class managerCourseController extends Controller
         $course = course::with(['subject' , 'teacher' , 'requirment'])->find($id);
         $final_price = $course->price - ($course->price * $course->discount / 100);
         return view('dashboard.pages.courses.managerCourses.courseDetails' , compact(['course' , 'final_price']));
+    }
+
+    public function show_updated(string $id){
+
+
+        return view('dashboard.pages.courses.managerCourses.updatedCoursesDetails');
     }
 
     /**

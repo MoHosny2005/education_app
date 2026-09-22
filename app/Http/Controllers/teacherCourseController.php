@@ -98,20 +98,20 @@ class teacherCourseController extends Controller
         // Delete any old update requests for this course
          update_course::where('course_id', $id)->delete();
 
-         
+
          $course = course::findOrFail($id);
         $img_name = $course->image; // الافتراضي: تفضل زي ما هي لو مفيش صورة جديدة
 
         if ($request->hasFile('img')) {
             // امسح الصورة القديمة لو موجودة فعلاً
-            if ($course->image && Storage::disk('public')->exists('images/courses/' . $course->image)) {
-                Storage::disk('public')->delete('images/courses/' . $course->image);
-            }
+            // if ($course->image && Storage::disk('public')->exists('images/courses/' . $course->image)) {
+            //     Storage::disk('public')->delete('images/courses/' . $course->image);
+            // }
 
             // خزّن الصورة الجديدة
             $image = $request->file('image');
             $img_name = uniqid() . '.' . $image->extension();
-            $image->storeAs('images/courses', $img_name, 'public');
+            $image->storeAs('images/updated_courses', $img_name, 'public');
         }
 
         update_course::create([

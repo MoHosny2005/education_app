@@ -89,6 +89,15 @@
             </span>
             <span class="text">Teachers</span>
           </a>
+          {{-- updated courses --}}
+        </li>
+         <li class="nav-item ">
+          <a href="{{route('manager_courses.create')}}" class="collapsed d-flex justify-content-center align-items-center">
+            <span class="icon  ">
+               <i class="lni lni-agenda"></i>
+            </span>
+            <span class="text">Updated Courses</span>
+          </a>
 
         </li>
 

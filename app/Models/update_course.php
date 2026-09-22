@@ -17,6 +17,7 @@ class update_course extends Model
         'short_description' ,
         'price' ,
         'discount' ,
+        'status' ,
         'image' ,
     ];
 
