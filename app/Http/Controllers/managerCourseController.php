@@ -48,9 +48,30 @@ class managerCourseController extends Controller
     }
 
     public function show_updated(string $id){
+        $updated_course = update_course::with('requirment' , 'course')->find($id);
 
 
-        return view('dashboard.pages.courses.managerCourses.updatedCoursesDetails');
+        // changes conditions
+        $isTitleChanged = $updated_course->course->title  !== $updated_course->title ;
+        $isRequirmentChanged = $updated_course->course->requirment_id !== $updated_course->requirment_id ;
+        $isDescriptionChanged = $updated_course->course->description !== $updated_course->description ;
+        $isShortDescriptionChanged = $updated_course->course->short_description !== $updated_course->short_description ;
+        $isPriceChanged = $updated_course->course->price !== $updated_course->price ;
+        $isDiscountChanged = $updated_course->course->discount !== $updated_course->discount ;
+        $isImageChanged = $updated_course->course->image !== $updated_course->image;
+
+        return view('dashboard.pages.courses.managerCourses.updatedCoursesDetails' , compact([
+            'updated_course' ,
+            'isTitleChanged' ,
+            'isRequirmentChanged' ,
+            'isDescriptionChanged' ,
+            'isShortDescriptionChanged' ,
+            'isPriceChanged' ,
+            'isDiscountChanged' ,
+            'isImageChanged' ,
+        ]));
+
+
     }
 
     /**

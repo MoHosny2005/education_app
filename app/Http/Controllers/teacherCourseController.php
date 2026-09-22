@@ -102,7 +102,7 @@ class teacherCourseController extends Controller
          $course = course::findOrFail($id);
         $img_name = $course->image; // الافتراضي: تفضل زي ما هي لو مفيش صورة جديدة
 
-        if ($request->hasFile('img')) {
+        if ($request->hasFile('image')) {
             // امسح الصورة القديمة لو موجودة فعلاً
             // if ($course->image && Storage::disk('public')->exists('images/courses/' . $course->image)) {
             //     Storage::disk('public')->delete('images/courses/' . $course->image);
