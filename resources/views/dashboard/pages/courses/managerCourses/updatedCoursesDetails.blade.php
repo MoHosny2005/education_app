@@ -274,9 +274,9 @@
     </div>
 
 
-    <div class="p-4">
-        <button type="button" class="cur-btn cur-btn-reject">Reject</button>
-        <button type="button" class="cur-btn cur-btn-approve">Approve</button>
+    <div class="p-4 d-flex gap-3">
+        <a href="{{route('updateOriginalCourse' , [$updated_course->id , 'reject'])}}" class="btn btn-outline-danger">Reject</a>
+        <a href="{{route('updateOriginalCourse' , [$updated_course->id , 'accept'])}}" class="btn btn-primary">Accept</a>
     </div>
 </div>
 

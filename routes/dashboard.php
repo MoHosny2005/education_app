@@ -42,6 +42,7 @@ Route::middleware(ManagerAuth::class)->group(
         // change course status
         Route::patch('change_status/{id}/{status}' , [managerCourseController::class , 'changeStatus'])->name('change_status');
         Route::get('updatedCourseDetails/{id}' , [ managerCourseController::class , 'show_updated' ])->name('updatedCourseDetails');
+        Route::get('updateOriginalCourse/{id}/{action}' , [managerCourseController::class , 'updateOriginalCourse'])->name('updateOriginalCourse');
 
     }
 );

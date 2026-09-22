@@ -114,6 +114,8 @@ class teacherCourseController extends Controller
             $image->storeAs('images/updated_courses', $img_name, 'public');
         }
 
+         
+
         update_course::create([
             'title' => $request->title ,
             'course_id' => $id,
@@ -124,6 +126,7 @@ class teacherCourseController extends Controller
           'discount' => $request->discount ,
           'image' =>  $img_name ,
         ]);
+
 
         return to_route('teacher_courses.index')->with('success' , 'Your Course Entered At The Pendening Status Waiting For Approved');
     }
