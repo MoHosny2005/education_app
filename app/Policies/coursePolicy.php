@@ -31,15 +31,15 @@ class coursePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+         return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, course $course): bool
+    public function update(teacher $teacher, course $course): bool
     {
-        return false;
+         return false;
     }
 
     /**
@@ -65,4 +65,10 @@ class coursePolicy
     {
         return false;
     }
+
+    public function updateCourse(teacher $teacher, course $course): bool
+{
+    return $teacher->id === $course->teacher_id
+        && $course->status !== 'Rejected';
+}
 }

@@ -9,12 +9,15 @@ use App\Models\subject;
 use App\Models\teacher;
 use App\Models\update_course;
 use App\Policies\coursePolicy ;
+use App\Policies\updatedCoursePolicy ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class teacherCourseController extends Controller
 {
+    use AuthorizesRequests ;
 
     /**
      * Display a listing of the resource.
@@ -85,7 +88,15 @@ class teacherCourseController extends Controller
      */
     public function edit(string $id)
     {
-        $course = course::find($id);
+        //policy
+        $teacher = Auth::guard('teach')->user();
+          $course = course::find($id);
+        if($teacher->cannot('updateCourse' , $course)){
+            return to_route('teacher_courses.index');
+        }
+
+
+
           $subjects = subject::all();
         return view('dashboard.pages.courses.teacherCourses.edit' , compact(['subjects' , 'course']));
     }
@@ -95,12 +106,15 @@ class teacherCourseController extends Controller
      */
     public function update(courseUpdateRequest $request, string $id)
     {
+
         // Delete any old update requests for this course
          update_course::where('course_id', $id)->delete();
 
 
-         $course = course::findOrFail($id);
+  $course = course::findOrFail($id);
         $img_name = $course->image; // الافتراضي: تفضل زي ما هي لو مفيش صورة جديدة
+
+
 
         if ($request->hasFile('image')) {
             // امسح الصورة القديمة لو موجودة فعلاً
@@ -114,7 +128,7 @@ class teacherCourseController extends Controller
             $image->storeAs('images/updated_courses', $img_name, 'public');
         }
 
-         
+
 
         update_course::create([
             'title' => $request->title ,

@@ -200,7 +200,9 @@ h1,h2,h3,h4,h5,.font-display{
   </div>
 
  <div class="div">
+    @if(Auth::guard('teach')->user()->can('updateCourse' , $course))
     <a href="{{route('teacher_courses.edit' , $course->id)}}" class="btn btn-primary">Edit Course</a>
+    @endif
  </div>
 
 </div>
