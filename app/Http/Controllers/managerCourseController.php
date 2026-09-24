@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\changeCourseStatus;
+use App\Events\updateCourseApproval;
 use App\Models\course;
 use App\Models\teacher;
 use App\Models\update_course;
@@ -76,46 +77,76 @@ class managerCourseController extends Controller
     }
 
     // update original course dats
-    public function updateOriginalCourse(string $id , string $action){
-         $updated_course = update_course::with('requirment' , 'course')->find($id);
-         $originalCourse_id = $updated_course->course_id;
-        //  if accepted
-        if($action === 'accept'){
-            //image
-             if ($updated_course->course->image && Storage::disk('public')->exists('images/courses/' . $updated_course->course->image)) {
+
+public function updateOriginalCourse(string $id , string $action){
+
+    $updated_course = update_course::with('requirment' , 'course')->find($id);
+
+    $originalCourse_id = $updated_course->course_id;
+
+    // if accepted
+
+    if($action === 'accept'){
+
+        //image
+
+        if($updated_course->image !== $updated_course->course->image){
+
+            if($updated_course->course->image && Storage::disk('public')->exists('images/courses/' . $updated_course->course->image)){
+
                 Storage::disk('public')->delete('images/courses/' . $updated_course->course->image);
+
             }
 
-        //   // خزّن الصورة الجديدة
-        //     $image = $updated_course->image;
-        //     $img_name = uniqid() . '.' . $image->extension();
-        //     $image->storeAs('images/courses', $img_name, 'public');
-        if(storage::disk('public')->exists('images/updated_courses/' . $updated_course->image)){
-            storage::disk('public')->move('images/updated_courses/' . $updated_course->image , 'images/courses/' . $updated_course->image ) ;
-        }
-            //update original course data
-            course::where('id' ,  $originalCourse_id )->update([
-                'title'=> $updated_course->title ,
-                'requirment_id' => $updated_course->requirment_id ,
-                'description' => $updated_course->description ,
-                'short_description' => $updated_course->short_description ,
-                'price' => $updated_course->price ,
-                'discount' =>$updated_course->discount ,
-                'image'=>$updated_course->image ,
-            ]);
+            if(Storage::disk('public')->exists('images/updated_courses/' . $updated_course->image)){
 
-        }
-        // //if rejected
-        // elseif($action === 'reject'){
+                Storage::disk('public')->move('images/updated_courses/' . $updated_course->image , 'images/courses/' . $updated_course->image);
 
-        // }
-        //delete data
-           if ($updated_course->image && Storage::disk('public')->exists('images/updated_courses/' . $updated_course->image)) {
-                Storage::disk('public')->delete('images/updated_courses/' . $updated_course->image);
             }
-        update_course::where('id' , $id)->delete();
-        return to_route('manager_courses.create')->with('success' , 'Course Data Was Saved');
+
+        }
+
+        //update original course data
+
+        course::where('id' , $originalCourse_id )->update([
+
+            'title'=> $updated_course->title ,
+
+            'requirment_id' => $updated_course->requirment_id ,
+
+            'description' => $updated_course->description ,
+
+            'short_description' => $updated_course->short_description ,
+
+            'price' => $updated_course->price ,
+
+            'discount' =>$updated_course->discount ,
+
+            'image'=>$updated_course->image ,
+
+        ]);
+
     }
+
+   
+    $teacher = teacher::find($updated_course->course->teacher_id);
+
+    Event(new updateCourseApproval($updated_course, $teacher , $action));
+
+    //delete data
+
+    if($updated_course->image && Storage::disk('public')->exists('images/updated_courses/' . $updated_course->image)){
+
+        Storage::disk('public')->delete('images/updated_courses/' . $updated_course->image);
+
+    }
+
+    update_course::where('id' , $id)->delete();
+
+    return to_route('manager_courses.create')->with('success' , 'Course Data Was Saved');
+
+}
+
 
     /**
      * Show the form for editing the specified resource.

@@ -18,8 +18,8 @@
                       <tr>
                         <td style="vertical-align:middle; padding-left:10px;">
                           <!-- شعار المنصة: استبدل الرابط بلوجو المنصة -->
-                      {{-- <img src="https://via.placeholder.com/48x48.png?text=EA" width="48" height="48" alt="Education App Logo" style="display:block; border-radius:10px;"> --}}
-                        </td>
+                      {{-- <img src="{{ $message->embed(storage_path('app/public/images/teachers/' . $teacher->img))}}" width="120" height="120" style="border-radius: 50% ; object-fit:cover ;" alt="Education App Logo" >
+                        </td> --}}
                         <td style="vertical-align:middle;">
                           <span style="font-size:24px; font-weight:bold; color:#2b2ee0;">Education App</span>
                         </td>
@@ -30,7 +30,7 @@
               </table>
             </td>
           </tr>
-
+{{--asset('storage/images/teachers/'. $teacher->img)  --}}
           <!-- Greeting -->
           <tr>
             <td style="padding:32px 32px 0 32px;" align="right">

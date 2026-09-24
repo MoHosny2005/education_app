@@ -29,7 +29,7 @@ class sendEmailToTeacher implements ShouldQueue
          $date = $course->created_at ;
           $details = "Course Activation Status";
         $content = "Your Course " . $course->title . "  Created From: " . $date->diffForHumans() . " Has Been " . $event->status .  " If You Have Any Problems Connect With Admin" ;
-        Mail::to($teacher->email)->send(new teacherMail($content , $details , $teacher));
+        Mail::to($teacher->email)->send(new  teacherMail($content , $details , $teacher));
 
     }
 }

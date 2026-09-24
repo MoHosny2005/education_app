@@ -24,6 +24,8 @@ class teacherMail extends Mailable
         $this->teacher = $teacher ;
     }
 
+   
+
     /**
      * Get the message envelope.
      */
