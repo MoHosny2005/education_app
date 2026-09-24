@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class sendCourseUpdateApprovalEmailToTeacher 
+class sendCourseUpdateApprovalEmailToTeacher implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -24,9 +24,9 @@ class sendCourseUpdateApprovalEmailToTeacher
     public function handle(updateCourseApproval $event): void
     {
         $teacher = $event->teacher ;
-        $course = $event->course ;
+        $course_title = $event->course_title;
          $details = "Course Updating Approval";
-          $content = "Your requested update for the course " . $course->title . " has been " . $event->action .  " If You Have Any Problems please contact us" ;
+          $content = "Your requested update for the course " . $course_title . " has been " . $event->action .  " If You Have Any Problems please contact us" ;
           Mail::to($teacher->email)->send(new  teacherMail($content , $details , $teacher));
     }
 }

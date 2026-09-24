@@ -23,11 +23,11 @@ class sendCourseUpdateApprovalNotificationToTeacher
      */
     public function handle(updateCourseApproval $event): void
     {
-       $course = $event->course ;
+        $course_title = $event->course_title;
 
         $teacher = $event->teacher;
         $details = "Course Updating Approval";
-          $content = "Your requested update for the course " . $course->title . " has been " . $event->action .  " If You Have Any Problems please contact us" ;
+          $content = "Your requested update for the course " . $course_title . " has been " . $event->action .  " If You Have Any Problems please contact us" ;
            $teacher->notify(new teacherNotification($content , $details));
     }
 }

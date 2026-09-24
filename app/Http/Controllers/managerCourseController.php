@@ -128,10 +128,10 @@ public function updateOriginalCourse(string $id , string $action){
 
     }
 
-   
+
     $teacher = teacher::find($updated_course->course->teacher_id);
 
-    Event(new updateCourseApproval($updated_course, $teacher , $action));
+    Event(new updateCourseApproval($updated_course->title, $teacher , $action));
 
     //delete data
 

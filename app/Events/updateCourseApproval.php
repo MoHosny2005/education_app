@@ -17,10 +17,10 @@ class updateCourseApproval
     /**
      * Create a new event instance.
      */
-    public $course , $teacher , $action ;
-    public function __construct($course , $teacher , $action)
+    public $course_title , $teacher , $action ;
+    public function __construct($course_title , $teacher , $action)
     {
-        $this->course = $course ;
+        $this->course_title = $course_title ;
         $this->teacher = $teacher ;
         $this->action = $action ;
     }
