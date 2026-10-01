@@ -84,7 +84,7 @@
                          <p>{{$value['title']}}</p>
                        </td>
                        <td>
-                         {{-- <a href="{{route('year.edit' , $value['id'] )}}" class="btn btn-primary ">Update</a> --}}
+                         <a href="{{route('section.edit' , $value['id']  )}}" class="btn btn-primary ">Update</a>
                        </td>
                        <td>
 

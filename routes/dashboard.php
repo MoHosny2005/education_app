@@ -81,6 +81,8 @@ Route::middleware(TeacherAuth::class)->group(
         //sections
         Route::get('sections/{id}' , [sectionController::class , 'index'])->name('section.index');
         Route::post('section_store/{id}' , [sectionController::class , 'store'])->name('section.store');
+        Route::get('section_edit/{id}' , [sectionController::class , 'edit'])->name('section.edit');
+        Route::put('section_update/{id}' , [sectionController::class , 'update'])->name('section.update');
 
         Route::get('UpdateTeacherProfilePhoto' , function(){
          return view('dashboard.pages.profile details.teachers.updateTeacherProfilePhoto') ;
