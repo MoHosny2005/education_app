@@ -2,63 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\course;
+use App\Models\section;
 use Illuminate\Http\Request;
 
 class sectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('dashboard.pages.sections.view');
+    public function index(string $id){
+        $course = course::findOrFail($id);
+        $sections = section::all();
+        return view('dashboard.pages.sections.view' , compact(['course' , 'sections']));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    public function store(Request $request , string $id){
+        $course_id = $id ;
+        $request->validate([
+            'title' => "required|unique:sections,title|min:4|max:30" ,
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        section::create([
+            'course_id' => $course_id ,
+            'title' => $request->title ,
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+           return to_route('section.index' , $course_id)->with('Success', $request->title . ' Section has been added successfully');
     }
 }

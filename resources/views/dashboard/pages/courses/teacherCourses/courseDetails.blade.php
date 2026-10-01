@@ -158,9 +158,9 @@ h1,h2,h3,h4,h5,.font-display{
     </div>
      <div class="col-sm-6  ">
 
-      <a href="{{route('sections.index')}}"  class="info-pill btn">
+      <a href="{{route('section.index' , $course->id)}}"  class="info-pill btn">
 
-        
+
           <div class="val">Sections</div>
 
          </a>

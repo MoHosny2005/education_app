@@ -79,7 +79,8 @@ Route::middleware(TeacherAuth::class)->group(
         Route::resource('teacher_courses' , teacherCourseController::class);
 
         //sections
-        Route::resource('sections' , sectionController::class);
+        Route::get('sections/{id}' , [sectionController::class , 'index'])->name('section.index');
+        Route::post('section_store/{id}' , [sectionController::class , 'store'])->name('section.store');
 
         Route::get('UpdateTeacherProfilePhoto' , function(){
          return view('dashboard.pages.profile details.teachers.updateTeacherProfilePhoto') ;

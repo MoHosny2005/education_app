@@ -31,7 +31,7 @@ class yearController extends Controller
     public function store(yearRequest $request)
     {
         year::create($request->toArray());
-       return to_route('year.index')->with('Success', $request->year_name . ' has been added successfully');;
+       return to_route('year.index')->with('Success', $request->year_name . ' has been added successfully');
 
 
     }
