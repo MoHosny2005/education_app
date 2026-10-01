@@ -88,7 +88,7 @@
                        </td>
                        <td>
 
-                          {{-- @include('dashboard.pages.years.deleteModal' , ['value'=>$value ]) --}}
+                          @include('dashboard.pages.sections.deleteModal' , ['value'=>$value ])
                        </td>
                      </tr>
                      @empty

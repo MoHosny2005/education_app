@@ -11,7 +11,7 @@ class sectionController extends Controller
 {
     public function index(string $id){
         $course = course::findOrFail($id);
-        $sections = section::all();
+        $sections = section::where('course_id' , $id)->get();
         return view('dashboard.pages.sections.view' , compact(['course' , 'sections']));
     }
 
@@ -52,5 +52,12 @@ class sectionController extends Controller
 
         return to_route('section.index' , $section->course->id)->with('Success', $request->title . ' Section has been Updated successfully');
 
+    }
+
+    public function delete(string $id){
+        $section = section::find($id);
+        $course_id = $section->course->id ;
+        section::where('id' , $id)->delete();
+        return to_route('section.index' , $course_id)->with('Success', $section->title . ' Section has been Deleted successfully');
     }
 }
