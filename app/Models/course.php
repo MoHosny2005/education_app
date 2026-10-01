@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\subject;
 use App\Models\teacher;
+use App\Models\section;
 use App\Models\update_course;
 
 class course extends Model
@@ -41,5 +42,10 @@ class course extends Model
     //updated course relationship
     public function updated_courses(){
         return $this->hasMany(update_course::class);
+    }
+
+    //sections relationship
+    public function section(){
+        return $this->hasMany(section::class);
     }
 }

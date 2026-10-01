@@ -3,6 +3,7 @@
 use App\Http\Controllers\ManagerAuthController;
 use App\Http\Controllers\managerController;
 use App\Http\Controllers\managerCourseController;
+use App\Http\Controllers\sectionController;
 use App\Http\Controllers\subjectController;
 use App\Http\Controllers\TeacherAuthController;
 use App\Http\Controllers\teacherController;
@@ -76,6 +77,9 @@ Route::middleware(TeacherAuth::class)->group(
 
         //courses
         Route::resource('teacher_courses' , teacherCourseController::class);
+
+        //sections
+        Route::resource('sections' , sectionController::class);
 
         Route::get('UpdateTeacherProfilePhoto' , function(){
          return view('dashboard.pages.profile details.teachers.updateTeacherProfilePhoto') ;
